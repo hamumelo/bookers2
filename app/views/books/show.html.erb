@@ -1,28 +1,21 @@
 
 <!--共通テンプレート(userinfo)-->
-<%= render 'books/userinfo', books: @books %>
+<%= render 'books/userinfo', users: @users %>
 
 
   
   <!--投稿データ-->
     <div class='col-md-8 offset-md-1'>
       <h2>Book detail</h2>
-      <table class='table table-hover table-inverse'>
-  <thead>
-    <tr>
-      <th></th>
-      <th>Title</th>
-      <th>Opinion</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-  <tbody>
+      <table class='table'>
+  
      <% @books.each do |book| %>
       <tr>
+          <% if @user.id == book.user.id %>
         <td>
-          <%= link_to user_path(current_user.id) do %>
+          <%= link_to user_path(book.user.id) do %>
           <%= attachment_image_tag book.user, :profile_image, size: "40x40", fallback: "no_image.jpg" %>
-          <br><%= current_user.name %></br>
+          <br><%= book.user.name %></br>
           <% end %>
         </td>
         <td>
@@ -31,11 +24,16 @@
           <% end %>
         </td>
         <td><%= book.body %></td>
-        <td><%= link_to "Edit", edit_book_path(book.id), class: "btn btn-sm btn-success edit" %></td>
-        <td><%= link_to "Destroy", destroy_book_path(book.id), method: :delete, class: "btn btn-sm btn-danger destroy", "data-confirm" => "本当に消しますか？"  %></td>
+        <td>
+          <%= link_to "Edit", edit_book_path(book.id), class: "btn btn-sm btn-success edit" %>
+        </td>
+        <td>
+          <%= link_to "Destroy", destroy_book_path(book.id), method: :delete, class: "btn btn-sm btn-danger destroy", "data-confirm" => "本当に消しますか？"  %>
+        </td>
+          <% end %>
       </tr>
     <% end %> 
-  </tbody>
+    
 </table>
     </div>
   </div>

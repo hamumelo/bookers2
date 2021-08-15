@@ -1,5 +1,11 @@
 class BooksController < ApplicationController
   
+  
+# before_action :authenticate_user!
+# before_action :correct_book,only: [:edit]
+ 
+  
+  
   def new
     @book = Book.new
     @user = User.new
@@ -23,19 +29,23 @@ class BooksController < ApplicationController
   
 
   def index
+     @book = Book.all.order(created_at: :desc)
      @users = User.all
      @books = Book.all
      @book = Book.new
-     @user = User.new
+    # @user = User.new
      @user = current_user
   end
 
   def show
-    @books = Book.all
-    @book = Book.new
     @book = Book.find(params[:id])
-    @user = current_user
+    @books = Book.all
+    @users = User.all
+    @book = Book.new
     @user = User.new
+    
+    @user = current_user
+    
   end
   
    def edit
@@ -62,6 +72,7 @@ class BooksController < ApplicationController
   
 
   def destroy
+    @user = current_user
     @book = Book.find(params[:id])
     @book.destroy
     redirect_to books_path
@@ -70,6 +81,16 @@ class BooksController < ApplicationController
   def users
     public_method(:show, :edit, :update).super_method.call
   end
+  
+  
+  
+  
+  # def correct_
+  #       @book = Book.find(params[:id])
+  #   unless @book.user.id == current_user.id
+  #     redirect_to book_path(@book.id)
+  #   end
+  # end
   
   private
 

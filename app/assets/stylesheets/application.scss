@@ -17,6 +17,11 @@
 
 .notice {
   color: green;
+  margin-bottom: 16px;
+}
+
+#error_explanation > h2 {
+  color: red;
 }
 
 h3 {

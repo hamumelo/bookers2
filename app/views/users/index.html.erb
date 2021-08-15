@@ -1,57 +1,32 @@
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
-
-<header>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-  <span><%= link_to 'Bookers', "/", class: "navbar-brand" %></span>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav ml-auto">
-          <li><%= link_to '  Home', user_path(current_user.id), class: "fas fa-home nav-link text-light" %></li>
-          <li><%= link_to '  Users', users_path, class: "fas fa-users nav-link text-light" %></li>
-          <li><%= link_to '  Books', "/books", class: "fas fa-book-open nav-link text-light" %></li>
-          <li><%= link_to '  logout', destroy_user_session_path, method: :delete, class: "fas fa-sign-out-alt nav-link text-light" %></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-</header>
-
-
-
 <%= render 'books/userinfo', books: @books %>
 
 
 
 
-    
-    
+
+
     <div class='col-md-8 offset-md-1'>
       <h2>Users</h2>
       <table class='table table-hover table-inverse'>
   <thead>
     <tr>
-      <th></th>
       <th>image</th>
       <th>name</th>
       <th colspan="3"></th>
     </tr>
   </thead>
   <tbody>
-    <% @books.each do |book| %>
+    <% @users.each do |user| %>
       <tr>
         <td>
-          <%= attachment_image_tag book.user, :profile_image, size: "40x40", fallback: "no_image.jpg" %>
+          <%= attachment_image_tag user, :profile_image, size: "40x40", fallback: "no_image.jpg" %>
         </td>
         <td>
-          <%= current_user.name %>
+          <%= user.name %>
         </td>
-        <td><%= link_to "Show", user_path(current_user.id) %></td>
+        <td><%= link_to "Show", user_path(user.id) %></td>
       </tr>
-    <% end %> 
+    <% end %>
   </tbody>
 </table>
     </div>
