@@ -1,63 +1,47 @@
 class BooksController < ApplicationController
-  
-  
-# before_action :authenticate_user!
-# before_action :correct_book,only: [:edit]
- 
-  
-  
+    before_action :authenticate_user!
+    before_action :ensure_correct_book, { only: [:edit] }
+
   def new
-    @book = Book.new
-    @user = User.new
   end
 
-  
+
   def create
-    @book = Book.new(book_params)
-    @book.user_id = current_user.id
-    if @book.save
+    @book_new = Book.new(book_params)
+    @book_new.user_id = current_user.id
+    if @book_new.save
       flash[:notice] = "Book was successfully created."
-    redirect_to book_path(@book.id)
+    redirect_to book_path(@book_new.id)
     else
       @books = Book.all
       @user = current_user
       render :index
     end
   end
-  
-  
-  
+
+
+
 
   def index
-     @book = Book.all.order(created_at: :desc)
-     @users = User.all
      @books = Book.all
-     @book = Book.new
-    # @user = User.new
+     @book_new = Book.new
      @user = current_user
   end
 
   def show
     @book = Book.find(params[:id])
-    @books = Book.all
-    @users = User.all
-    @book = Book.new
-    @user = User.new
-    
-    @user = current_user
-    
+    @book_new = Book.new
+    @books = Book.page(params[:page]).reverse_order
+    @user = @book.user
+
   end
-  
+
    def edit
-    @book = Book.new
     @book = Book.find(params[:id])
     @user = current_user
-    @user = User.new
    end
-   
+
    def update
-       @user = User.new
-       @books = Book.all
        @book = Book.find(params[:id])
        @book.user_id = current_user.id
     if @book.update(book_params)
@@ -68,8 +52,8 @@ class BooksController < ApplicationController
        render :edit
     end
    end
-  
-  
+
+
 
   def destroy
     @user = current_user
@@ -77,25 +61,19 @@ class BooksController < ApplicationController
     @book.destroy
     redirect_to books_path
   end
-  
-  def users
-    public_method(:show, :edit, :update).super_method.call
+
+
+  def ensure_correct_book
+        @book = Book.find_by(id: params[:id])
+    unless @book.user.id == current_user.id
+      redirect_to books_path
+    end
   end
-  
-  
-  
-  
-  # def correct_
-  #       @book = Book.find(params[:id])
-  #   unless @book.user.id == current_user.id
-  #     redirect_to book_path(@book.id)
-  #   end
-  # end
-  
+
   private
 
   def book_params
-    params.require(:book).permit(:title, :body, :image, :user)
+    params.require(:book).permit(:title, :body)
   end
-  
+
 end
